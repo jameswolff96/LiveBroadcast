@@ -2,3 +2,22 @@ LiveBroadcast
 =============
 
 Automatic Broadcast Plugin for CraftBukkit
+
+The "title" is the custom name that appears before each message.
+"timer" is the time in seconds between each message.
+You can have as many messages as you would like, the only limit is your servers processing power.
+
+If you would like to use color-codes use the '&' symbol followed by 0-9 and a-f. For more information on 
+color-codes visit, http://www.minecraftwiki.net/wiki/Formatting_codes
+
+If you use a color-code ensure that the string is surrounded by single-quotes (' ')
+
+EXAMPLE:
+
+INCORRECT:
+
+1: This &1is &fa test of &6the color-codes
+
+CORRECT:
+
+1: 'This &1is &fa test of &6the color-codes'
