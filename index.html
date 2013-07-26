@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Livebroadcast by jwolff52</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/jwolff52/LiveBroadcast">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/jwolff52/LiveBroadcast/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/jwolff52/LiveBroadcast/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Livebroadcast</h1>
+          <p>Automatic Broadcast Plugin for CraftBukkit</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/jwolff52">jwolff52</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h3>
+<a name="livebroadcast" class="anchor" href="#livebroadcast"><span class="octicon octicon-link"></span></a>LiveBroadcast</h3>
+
+<p>Automatic Broadcast Plugin for CraftBukkit</p>
+
+<p>The "title" is the custom name that appears before each message.
+"timer" is the time in seconds between each message.
+You can have as many messages as you would like, the only limit is your servers processing power.</p>
+
+<p>If you would like to use color-codes use the '&amp;' symbol followed by 0-9 and a-f. For more information on 
+color-codes visit, <a href="http://www.minecraftwiki.net/wiki/Formatting_codes">http://www.minecraftwiki.net/wiki/Formatting_codes</a></p>
+
+<p>If you use a color-code ensure that the string is surrounded by single-quotes (' ')</p>
+
+<p>EXAMPLE:</p>
+
+<p>INCORRECT:</p>
+
+<pre><code>1: This &amp;1is &amp;fa test of &amp;6the color-codes
+</code></pre>
+
+<p>CORRECT:</p>
+
+<pre><code>1: 'This &amp;1is &amp;fa test of &amp;6the color-codes'
+</code></pre>
+
+<h3>
+<a name="permissions" class="anchor" href="#permissions"><span class="octicon octicon-link"></span></a>Permissions:</h3>
+
+<pre><code>lb.*:
+  description: Gives access to all of the LiveBroadcast Commands
+  children: 
+    lb.broadcast: false
+    lb.config.*: false
+    lb.credits: false
+    lb.reload: false
+    lb.toggle: false
+  default: false
+  lb.broadcast:
+    description: Allows the player to broadcast a message to the server using the LiveBroadcast prefic
+    default: false
+  lb.config.*: 
+    description: Allows the player to edit the config.yml
+    children:
+      lb.config.add: false
+      lb.config.del: false
+      lb.config.list: false
+    default: false
+    lb.config.add:
+        description: Allows the player to add messages to the config.yml
+        default: false
+    lb.config.del:
+        description: Allows the player to remove messages from the config.yml
+        default: false
+    lb.config.list:
+        description: Allows the player to view the messages in the config.yml
+        default: false
+  lb.credits:
+    description: Allows the player to view the plugin creator and version
+    default: true
+  lb.reload:
+    description: Allows the player to reload the config.yml
+    default: false
+  lb.toggle: 
+    description: Allows the player to turn LiveBroadcast on and off
+    default: false
+</code></pre>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
