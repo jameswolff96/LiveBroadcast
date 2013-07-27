@@ -1,3 +1,14 @@
+.white{
+  color: white;
+}
+.blue{
+  color: blue;
+}
+.gold{
+  color: #AEB404;
+}
+
+
 @font-face {
   font-family: 'OpenSansLight';
   src: url("../fonts/OpenSans-Light-webfont.eot");
