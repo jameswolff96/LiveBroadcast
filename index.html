@@ -43,28 +43,30 @@
 
 <p>Automatic Broadcast Plugin for CraftBukkit</p>
 
-<p>The "title" is the custom name that appears before each message.
+<hr><p>The "title" is the custom name that appears before each message.
 "timer" is the time in seconds between each message.
 You can have as many messages as you would like, the only limit is your servers processing power.</p>
 
-<p>If you would like to use color-codes use the '&amp;' symbol followed by 0-9 and a-f. For more information on 
+<hr><p>If you would like to use color-codes use the '&amp;' symbol followed by 0-9 and a-f. For more information on 
 color-codes visit, <a href="http://www.minecraftwiki.net/wiki/Formatting_codes">http://www.minecraftwiki.net/wiki/Formatting_codes</a></p>
 
-<p>If you use a color-code ensure that the string is surrounded by single-quotes (' ')</p>
+<hr><p>If you use a color-code ensure that the string is surrounded by single-quotes (' ')</p>
 
 <p>EXAMPLE:</p>
 
-<p>INCORRECT:</p>
+<p>INCORRECT:
+1: This &amp;1is &amp;fa test of &amp;6the color-codes</p>
 
-<pre><code>1: This &amp;1is &amp;fa test of &amp;6the color-codes
-</code></pre>
+<p>OUTPUT:
+This &amp;1is &amp;fa test of &amp;6the color-codes</p>
 
-<p>CORRECT:</p>
+<p>CORRECT:
+1: 'This &amp;1is &amp;fa test of &amp;6the color-codes'</p>
 
-<pre><code>1: 'This &amp;1is &amp;fa test of &amp;6the color-codes'
-</code></pre>
+<p>OUTPUT:
+This is a test of the color-codes</p>
 
-<h3>
+<hr><h3>
 <a name="permissions" class="anchor" href="#permissions"><span class="octicon octicon-link"></span></a>Permissions:</h3>
 
 <pre><code>lb.*:
@@ -77,7 +79,7 @@ color-codes visit, <a href="http://www.minecraftwiki.net/wiki/Formatting_codes">
     lb.toggle: false
   default: false
   lb.broadcast:
-    description: Allows the player to broadcast a message to the server using the LiveBroadcast prefic
+    description: Allows the player to broadcast a custom message to the server
     default: false
   lb.config.*: 
     description: Allows the player to edit the config.yml
