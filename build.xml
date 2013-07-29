@@ -4,7 +4,7 @@
 <jar destfile="bin/LiveBroadcast.jar"
      basedir="bin"
      includes="**"
-     excludes="">
+     excludes="*.jar">
 </jar>
 </target>
 </project>
