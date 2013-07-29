@@ -4,13 +4,15 @@ LiveBroadcast
 Automatic Broadcast Plugin for CraftBukkit
 
 The "title" is the custom name that appears before each message.
-"timer" is the time in seconds between each message.
-You can have as many messages as you would like, the only limit is your servers processing power.
+
+"timer" is the time in seconds between the appearance of each message.
+
+You can have as many messages as you would like.
 
 If you would like to use color-codes use the '&' symbol followed by 0-9 and a-f. For more information on 
-color-codes visit, http://www.minecraftwiki.net/wiki/Formatting_codes
+color-codes visit, http://www.minecraftwiki.net/wiki/Formatting_codes.
 
-If you use a color-code ensure that the string is surrounded by single-quotes (' ')
+If you use a color-code ensure that the string is surrounded by single-quotes (' ').
 
 EXAMPLE:
 
