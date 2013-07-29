@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<project name="LiveBroadcast build.xml">
+<target name="build-jar">
+<jar destfile="dist/LiveBroadcast.jar"
+     basedir="bin"
+     includes="**"
+     excludes="">
+</jar>
+</target>
+</project>
