@@ -1,6 +1,6 @@
 name: LiveBroadcast
 main: io.github.jwolff52.livebroadcast.LiveBroadcast
-version: .01
+version: 1.0.5
 commands:
     lb: 
         description: Commands for the LiveBroadcast Plugin!

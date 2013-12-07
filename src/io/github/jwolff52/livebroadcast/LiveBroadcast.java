@@ -15,37 +15,29 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LiveBroadcast extends JavaPlugin {
-	public final Logger logger = Logger.getLogger("Minecraft"); // Initialize
-																// the logger
+	public final Logger logger = Logger.getLogger("Minecraft");
 
-	public static LiveBroadcast plugin; // Create an instance of LiveBroadcast
+	public static LiveBroadcast plugin;
 
 	public static SettingsManager sm;
 
 	private static PluginDescriptionFile pdf;
 
-	private String version;
+	private String state, broadcastTitle;
 
-	private String state; // Used to tell the user whether the plugin is on or
-							// off when toggled
-	private String broadcastTitle; // Initialize the String that will be
-									// displayed before each message
+	private boolean toggle = true;
 
-	private boolean toggle = true; // Used in turning on and off the plugin
-
-	private int timer; // Used in delaying messages
-	private int configNumber = 1, maxMessages = 0;
+	private int timer, configNumber = 1, maxMessages = 0;
 
 	@Override
 	public void onEnable() {
-		// PluginManager pm=this.getServer().getPluginManager();
 		pdf = getDescription();
 		sm = SettingsManager.getInstance();
 		sm.setup(this);
 
-		if (!(new File(getDataFolder(), "README.txt").exists())) {
+		if (!(new File(getDataFolder(), "README.md").exists())) {
 			InputStream is = LiveBroadcast.class
-					.getResourceAsStream("/README.txt");
+					.getResourceAsStream("/README.md");
 			OutputStream os;
 			int readBytes;
 			byte[] buffer = new byte[4096];
@@ -59,16 +51,6 @@ public final class LiveBroadcast extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
-		/*
-		 * pm.addPermission(perms.canPreformAdd);
-		 * pm.addPermission(perms.canPreformAll);
-		 * pm.addPermission(perms.canPreformBroadcast);
-		 * pm.addPermission(perms.canPreformConfig);
-		 * pm.addPermission(perms.canPreformCredits);
-		 * pm.addPermission(perms.canPreformDel);
-		 * pm.addPermission(perms.canPreformReload);
-		 * pm.addPermission(perms.canPreformToggle);
-		 */
 
 		while (true) {
 			if (sm.config.getString(configNumber + "") != null) {
@@ -80,65 +62,38 @@ public final class LiveBroadcast extends JavaPlugin {
 			}
 		}
 
-		setBroadcastTitle(parseColors(sm.config.getString("title"))); // Sets
-																		// the
-																		// broadcastTimer
-																		// as
-																		// defined
-																		// in
-																		// the
-																		// config
-		timer = getConfig().getInt("timer") * 20; // Sets the timer as defined
-													// in the config
+		setBroadcastTitle(parseColors(sm.config.getString("title")));
+		timer = getConfig().getInt("timer") * 20;
 		/*************************************************************/
-		// Scheduler that prints the messages every timer seconds
+		// Scheduler that prints the messages every 'timer' seconds
 		getServer().getScheduler().scheduleSyncRepeatingTask(this,
 				new Runnable() {
 					@Override
 					public void run() {
-						if (getToggle()) {
-							if (sm.config.getString(configNumber + "") != null) {
-								if (!sm.config.getString(configNumber + "")
-										.equalsIgnoreCase("empty")) {
+						if (sm.config.getString(configNumber + "") != null) {
+							if (!sm.config.getString(configNumber + "")
+									.equalsIgnoreCase("empty")) {
+								if (getToggle())
 									Bukkit.broadcastMessage(broadcastTitle
 											+ parseColors(sm.config
 													.getString(configNumber
 															+ "")));
-								}
-								configNumber++;
-							} else {
-								configNumber = 1;
 							}
+							configNumber++;
+						} else {
+							configNumber = 1;
 						}
 					}
 				}, 0L, timer);
 		/*************************************************************/
 		this.logger.info(pdf.getName() + " Version: " + pdf.getVersion()
-				+ " has been enabled!"); // Displays a message in the console
+				+ " has been enabled!");
 	}
 
 	@Override
 	public void onDisable() {
-
-		// PluginManager pm=this.getServer().getPluginManager();
 		pdf = getDescription();
-		/*
-		 * pm.removePermission(perms.canPreformAdd);
-		 * pm.removePermission(perms.canPreformAll);
-		 * pm.removePermission(perms.canPreformBroadcast);
-		 * pm.removePermission(perms.canPreformConfig);
-		 * pm.removePermission(perms.canPreformCredits);
-		 * pm.removePermission(perms.canPreformDel);
-		 * pm.removePermission(perms.canPreformReload);
-		 * pm.removePermission(perms.canPreformToggle);
-		 */
-		this.logger.info(pdf.getName() + " has been Disabled!"); // Message
-																	// displayed
-																	// to
-																	// console
-																	// when the
-																	// server is
-																	// stopped/reloaded
+		this.logger.info(pdf.getName() + " has been Disabled!");
 	}
 
 	@Override
@@ -256,7 +211,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		String temp = ChatColor.DARK_BLUE
 				+ "\n============================================\n";
 		for (int x = 1; x < maxMessages; x++) {
-			temp += ChatColor.GREEN + "[" + x + "]" + broadcastTitle
+			temp += ChatColor.GREEN + "[" + x + "]"
 					+ parseColors(sm.config.getString(x + "")) + "\n";
 		}
 		temp += ChatColor.DARK_BLUE
@@ -281,9 +236,9 @@ public final class LiveBroadcast extends JavaPlugin {
 	}
 
 	private void credits(Player player) {
-		player.sendMessage(ChatColor.DARK_BLUE + "\n======================"
-				+ ChatColor.GREEN + "\nName: LiveBroadcast\nVersion: "
-				+ version + "\nDeveloper: jwolff52" + ChatColor.DARK_BLUE
+		player.sendMessage(ChatColor.GOLD + "\n======================"
+				+ ChatColor.BLUE + "\nName: LiveBroadcast\nVersion: "
+				+ pdf.getVersion() + "\nDeveloper: jwolff52" + ChatColor.GOLD
 				+ "\n======================");
 	}
 
@@ -307,7 +262,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		sm.config.set(args[2], "empty");
 		sm.saveConfig();
 		player.sendMessage("Message: \"" + message + ChatColor.WHITE
-				+ "\" was removed from the  list!");
+				+ "\" was removed from the list!");
 	}
 
 	private void reload(Player player) {
