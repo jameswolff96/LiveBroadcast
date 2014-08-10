@@ -1,5 +1,7 @@
 package io.github.jwolff52.livebroadcast;
 
+import io.github.jwolff52.livebroadcast.util.SettingsManager;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -35,15 +37,14 @@ public final class LiveBroadcast extends JavaPlugin {
 		sm = SettingsManager.getInstance();
 		sm.setup(this);
 
-		if (!(new File(getDataFolder(), "README.md").exists())) {
+		if (!(new File(getDataFolder(), "README.txt").exists())) {
 			InputStream is = LiveBroadcast.class
 					.getResourceAsStream("/README.md");
 			OutputStream os;
 			int readBytes;
 			byte[] buffer = new byte[4096];
 			try {
-				os = new FileOutputStream(new File(getDataFolder()
-						+ "/README.txt"));
+				os = new FileOutputStream(new File(getDataFolder() + "/README.txt"));
 				while ((readBytes = is.read(buffer)) > 0) {
 					os.write(buffer, 0, readBytes);
 				}
@@ -53,7 +54,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		}
 
 		while (true) {
-			if (sm.config.getString(configNumber + "") != null) {
+			if (sm.getConfig().getString(configNumber + "") != null) {
 				configNumber++;
 				maxMessages++;
 			} else {
@@ -62,169 +63,128 @@ public final class LiveBroadcast extends JavaPlugin {
 			}
 		}
 
-		setBroadcastTitle(parseColors(sm.config.getString("title")));
+		setBroadcastTitle(parseColors(sm.getConfig().getString("title")));
 		timer = getConfig().getInt("timer") * 20;
 		/*************************************************************/
 		// Scheduler that prints the messages every 'timer' seconds
-		getServer().getScheduler().scheduleSyncRepeatingTask(this,
-				new Runnable() {
-					@Override
-					public void run() {
-						if (sm.config.getString(configNumber + "") != null) {
-							if (!sm.config.getString(configNumber + "")
-									.equalsIgnoreCase("empty")) {
-								if (getToggle())
-									Bukkit.broadcastMessage(broadcastTitle
-											+ parseColors(sm.config
-													.getString(configNumber
-															+ "")));
-							}
-							configNumber++;
-						} else {
-							configNumber = 1;
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+					
+			@Override
+			public void run() {
+				if (sm.getConfig().getString(configNumber + "") != null) {
+					if (!sm.getConfig().getString(configNumber + "").equalsIgnoreCase("empty")) {
+						if (getToggle()){
+							Bukkit.broadcastMessage(broadcastTitle + parseColors(sm.getConfig().getString(configNumber + "")));
 						}
 					}
-				}, 0L, timer);
+					configNumber++;
+				} else {
+					configNumber = 1;
+				}
+			}
+		}, 0L, timer);
 		/*************************************************************/
 		this.logger.info(pdf.getName() + " Version: " + pdf.getVersion()
 				+ " has been enabled!");
+		super.onEnable();
 	}
 
 	@Override
 	public void onDisable() {
 		pdf = getDescription();
 		this.logger.info(pdf.getName() + " has been Disabled!");
+		super.onDisable();
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			if (label.equalsIgnoreCase("lb")) {
-				if (args[0].equalsIgnoreCase("toggle")) {
-					if ((!(player.hasPermission("lb.toggle")))
-							|| (!(player.hasPermission("lb.*")))) {
-						return false;
-					} else {
-						toggle(player);
-						return true;
-					}
-				} else if (args[0].equalsIgnoreCase("credits")) {
-					if ((!(player.hasPermission("lb.credits")))
-							|| (!(player.hasPermission("lb.*")))) {
-						return false;
-					} else {
-						credits(player);
-						return true;
-					}
-				} else if (args[0].equalsIgnoreCase("config")) {
-					if (!(args.length < 2)) {
-						if (player.hasPermission("lb.config.*")
-								|| player.hasPermission("lb.*")) {
-							if (args[1].equalsIgnoreCase("add")) {
-								if (!(args.length < 3)) {
-									add(player, args);
-									return true;
-								} else {
-									player.sendMessage("Usage: /lb config add <message>");
-									return false;
-								}
-							} else if (args[1].equalsIgnoreCase("del")) {
-								if (!(args.length < 3)) {
-									del(player, args);
-									return true;
-								} else {
-									player.sendMessage("Usage: /lb config del <number>");
-									return false;
-								}
-							} else if (args[1].equalsIgnoreCase("list")) {
-								list(player);
-								return true;
-							}
-						} else if (player.hasPermission("lb.config.add")) {
-							if (args[1].equalsIgnoreCase("add")) {
-								if (!(args.length < 3)) {
-									add(player, args);
-									return true;
-								} else {
-									player.sendMessage("Usage: /lb config add <message>");
-									return false;
-								}
-							}
-						} else if (player.hasPermission("lb.config.del")) {
-							if (args[1].equalsIgnoreCase("del")) {
-								if (!(args.length < 3)) {
-									del(player, args);
-									return true;
-								} else {
-									player.sendMessage("Usage: /lb config del <number>");
-									return false;
-								}
-							}
-						} else if (player.hasPermission("lb.config.list")) {
-							if (args[1].equalsIgnoreCase("list")) {
-								list(player);
-								return true;
-							}
-						} else {
-							player.sendMessage("Usage: /lb config <add|del|list>");
-							return false;
-						}
-					} else {
-						player.sendMessage("Usage: /lb config <add|del|list>");
-						return false;
-					}
-				} else if (args[0].equalsIgnoreCase("reload")) {
-					if ((!(player.hasPermission("lb.reload")))
-							|| (!(player.hasPermission("lb.*")))) {
-						return false;
-					} else {
-						reload(player);
-						return true;
-					}
-				}
-			} else if (label.equalsIgnoreCase("broadcast")) {
-				if ((!(player.hasPermission("lb.broadcast")))
-						|| (!(player.hasPermission("lb.*")))) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(cmd.getName().equals("lbtoggle")){
+			if (!(sender.hasPermission("lb.toggle") || sender.hasPermission("lb.*"))) {
+				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+				return false;
+			} else {
+				toggle(sender);
+				return true;
+			}
+		}else if(cmd.getName().equals("lbcredits")){
+			if (!(sender.hasPermission("lb.credits") || sender.hasPermission("lb.*"))) {
+				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+				return false;
+			} else {
+				credits(sender);
+				return true;
+			}
+		}else if(cmd.getName().equals("lbadd")){
+			if(!(sender.hasPermission("lb.add") ||  sender.hasPermission("lb.*"))) {
+				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+				return false;
+			}else{
+				if(args.length<1){
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbadd <message>");
 					return false;
-				} else {
-					if (args.length == 0) {
-						player.sendMessage(ChatColor.AQUA
-								+ "I thought you wanted to say something?");
-						return false;
-					} else if (args.length >= 1) {
-						String message = parseColors("title");
-						for (String subMessage : args) {
-							message += subMessage + " ";
-						}
-						Bukkit.broadcastMessage(message);
-						return true;
-					}
+				}
+				add(sender, args);
+				return true;
+			}
+		}else if(cmd.getName().equals("lbdel")){
+			if(!(sender.hasPermission("lb.del") ||  sender.hasPermission("lb.*"))) {
+				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+				return false;
+			}else{
+				if(args.length<1){
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+					return false;
+				}
+				try{
+					del(sender, args);
+					return true;
+				}catch(NumberFormatException e){
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+					return false;
+				}
+			}
+		}else if(cmd.getName().equals("lblist")){
+			if(!(sender.hasPermission("lb.list") ||  sender.hasPermission("lb.*"))) {
+				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+				return false;
+			}else{
+				if(args.length<1){
+					list(sender, "1");
+					return true;
+				}
+				try{
+					list(sender, args[0]);
+					return true;
+				}catch(NumberFormatException e){
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lblist [page]");
+					return false;
+				}
+			}
+		}else if(cmd.getName().equals("lbreload")){
+			if (!(sender.hasPermission("lb.reload") || sender.hasPermission("lb.*"))) {
+				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+				return false;
+			} else {
+				reload(sender);
+				return true;
+			}
+		}else if(cmd.getName().equals("lbbroadcast")){
+			if (!(sender.hasPermission("lb.broadcast") || sender.hasPermission("lb.*"))) {
+				return false;
+			} else {
+				if (args.length == 0) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA+"I thought you wanted to say something?\nUsage: /lbbroadcast <word> [word2] [word3]...");
+					return false;
+				} else if (args.length >= 1) {
+					broadcast(args);
+					return true;
 				}
 			}
 		}
 		return false;
 	}
 
-	private void list(Player player) {
-		String temp = ChatColor.DARK_BLUE
-				+ "\n============================================\n";
-		for (int x = 1; x < maxMessages; x++) {
-			temp += ChatColor.GREEN + "[" + x + "]"
-					+ parseColors(sm.config.getString(x + "")) + "\n";
-		}
-		temp += ChatColor.DARK_BLUE
-				+ "============================================";
-		player.sendMessage(temp);
-	}
-
-	public String parseColors(String temp) { // Method used to retrieve colors
-												// properly from the config
-		return ChatColor.translateAlternateColorCodes('&', temp);
-	}
-
-	private void toggle(Player player) {
+	private void toggle(CommandSender sender) {
 		if (getToggle()) {
 			setToggle(false);
 			state = "off";
@@ -232,45 +192,88 @@ public final class LiveBroadcast extends JavaPlugin {
 			setToggle(true);
 			state = "on";
 		}
-		player.sendMessage("LiveBroacast was turned " + state);
+		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"LiveBroacast was turned " + state);
 	}
 
-	private void credits(Player player) {
-		player.sendMessage(ChatColor.GOLD + "\n======================"
-				+ ChatColor.BLUE + "\nName: LiveBroadcast\nVersion: "
-				+ pdf.getVersion() + "\nDeveloper: jwolff52" + ChatColor.GOLD
-				+ "\n======================");
+	private void credits(CommandSender sender) {
+		sender.sendMessage(ChatColor.GOLD + "\n======================" + ChatColor.BLUE + "\nName: LiveBroadcast\nVersion: " + pdf.getVersion() + "\nDeveloper: jwolff52" + ChatColor.GOLD + "\n======================");
 	}
 
-	private void add(Player player, String[] args) {
+	private void add(CommandSender sender, String[] args) {
 		String message = "";
-		for (int x = 2; x < args.length - 1; x++) {
+		for (int x = 0; x < args.length - 1; x++) {
 			message += args[x] + " ";
 		}
 		message += args[args.length - 1];
-		sm.config.set((maxMessages + 1) + "", message);
+		sm.getConfig().set((maxMessages + 1) + "", message);
 		message = parseColors(message);
 		maxMessages++;
 		sm.saveConfig();
-		player.sendMessage("Message: \""
-				+ sm.config.getString(maxMessages + "") + ChatColor.WHITE
-				+ "\" was added to the  list!");
+		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: \"" + ChatColor.RESET + sm.getConfig().getString(maxMessages + "") + ChatColor.WHITE + "\" was added to the  list!");
 	}
 
-	private void del(Player player, String[] args) {
-		String message = getConfig().getString(args[2]);
-		sm.config.set(args[2], "empty");
+	private void del(CommandSender sender, String[] args) throws NumberFormatException{
+		int cNumber=Integer.valueOf(args[0]);
+		String message = getConfig().getString(args[0]);
+		for(int x=1;x<cNumber;x++){
+			sm.getConfig().set(x + "", sm.getConfig().getString(x + ""));
+		}
+		for(int x=cNumber;x<maxMessages;x++){
+			sm.getConfig().set(x + "", sm.getConfig().getString((x + 1) + ""));
+		}
+		sm.getConfig().set(maxMessages + "", null);
+		maxMessages--;
 		sm.saveConfig();
-		player.sendMessage("Message: \"" + message + ChatColor.WHITE
-				+ "\" was removed from the list!");
+		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: \"" + ChatColor.RESET + message + ChatColor.WHITE + "\" was removed from the list!");
 	}
 
-	private void reload(Player player) {
+	private void list(CommandSender sender, String page) throws NumberFormatException{
+		if(sender instanceof Player){
+			int intPage=Integer.valueOf(page)-1;
+			String temp = ChatColor.DARK_BLUE + "=== LiveBroadcast ==Page " + (intPage + 1) +"/" + ((maxMessages/10) + 1) + "================";
+			for (int x = (intPage*10)%maxMessages; x < (intPage*10)+10 && x < maxMessages; x++) {
+				temp += "\n" + ChatColor.GREEN + "[" + (x + 1) + "] " + ChatColor.RESET + parseColors(sm.getConfig().getString(x + 1 + ""));
+			}
+			sender.sendMessage(temp);
+		}else{
+			String temp = ChatColor.DARK_BLUE + "=== LiveBroadcast =========================";
+			for (int x = 0; x < maxMessages; x++) {
+				temp += "\n" + ChatColor.GREEN + "[" + (x + 1) + "] " + ChatColor.RESET + parseColors(sm.getConfig().getString(x + 1 + ""));
+			}
+			sender.sendMessage(temp);
+		}
+	}
+
+	private void reload(CommandSender sender) {
 		setToggle(false);
 		sm.reloadConfig();
-		player.sendMessage(ChatColor.AQUA
-				+ "LiveBroacast configuration successfully reloaded!!");
+		int tempConfigNumber=1;
+		int tempMaxMessages=0;
+		while (true) {
+			if (sm.getConfig().getString(tempConfigNumber + "") != null) {
+				tempConfigNumber++;
+				tempMaxMessages++;
+			} else {
+				break;
+			}
+		}
+		maxMessages=tempMaxMessages;
+		setBroadcastTitle(parseColors(sm.getConfig().getString("title")));
+		timer = getConfig().getInt("timer") * 20;
+		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA + "LiveBroacast configuration successfully reloaded!!");
 		setToggle(true);
+	}
+	
+	private void broadcast(String[] args){
+		String message = parseColors(sm.getConfig().getString("title"));
+		for (String subMessage : args) {
+			message += subMessage + " ";
+		}
+		Bukkit.broadcastMessage(message);
+	}
+
+	public String parseColors(String temp) {
+		return ChatColor.translateAlternateColorCodes('&', temp);
 	}
 
 	public boolean getToggle() {

@@ -1,4 +1,4 @@
-package io.github.jwolff52.livebroadcast;
+package io.github.jwolff52.livebroadcast.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +39,8 @@ public class SettingsManager {
 		try {
 			config.save(cfile);
 		} catch (IOException e) {
-			Bukkit.getServer().getLogger().severe(ChatColor.RED+"Could not save LiveBroadcast config.yml!");
-			e.printStackTrace();//fitzcraft.mcph.co:25848
+			Bukkit.getServer().getLogger().severe(ChatColor.RED+"Could not save "+plugin.getDescription().getName()+" config.yml!");
+			e.printStackTrace();
 		}
 	}
 }

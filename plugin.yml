@@ -1,47 +1,52 @@
 name: LiveBroadcast
 main: io.github.jwolff52.livebroadcast.LiveBroadcast
-version: 1.0.5
+version: 2.0.3
 commands:
-    lb: 
-        description: Commands for the LiveBroadcast Plugin!
-    broadcast: 
+    lbtoggle: 
+        description: Toggles the LiveBroadcast Plugin on/off!
+    lbcredits: 
+        description: View the version and contributor(s) to the LiveBroadcast Plugin!
+    lbadd: 
+        description: Adds a new message to the LiveBroadcast Plugin!
+    lbdel: 
+        description: Deletes a message from the LiveBroadcast Plugin!
+    lblist: 
+        description: Lists the messages for the LiveBroadcast Plugin!
+    lbreload: 
+        description: Reloads the LiveBroadcast Plugin!
+    lbbroadcast: 
         description: Broadcasts a message to the server using the LiveBroadcast prefix.
 permissions:
     lb.*:
         description: Gives access to all of the LiveBroadcast Commands
-        children: 
-            lb.broadcast: false
-            lb.config.*: false
+        children:
+            lb.toggle: false
             lb.credits: false
             lb.reload: false
-            lb.toggle: false
+            lb.add: false
+            lb.del: false 
+            lb.list: false
+            lb.broadcast: false
         default: false
-        lb.broadcast:
-            description: Allows the player to broadcast a message to the server using the LiveBroadcast prefic
+        lb.toggle: 
+            description: Allows the player to turn LiveBroadcast on and off
             default: false
-        lb.config.*: 
-            description: Allows the player to edit the config.yml
-            children:
-                lb.config.add: false
-                lb.config.del: false
-                lb.config.list: false
-            default: false
-            lb.config.add:
-                description: Allows the player to add messages to the config.yml
-                default: false
-            lb.config.del:
-                description: Allows the player to remove messages from the config.yml
-                default: false
-            lb.config.list:
-                description: Allows the player to view the messages in the config.yml
-                default: false
         lb.credits:
             description: Allows the player to view the plugin creator and version
             default: true
+        lb.config.add:
+            description: Allows the player to add messages to the config.yml
+            default: false
+        lb.config.del:
+            description: Allows the player to remove messages from the config.yml
+            default: false
+        lb.config.list:
+            description: Allows the player to view the messages in the config.yml
+            default: false
         lb.reload:
             description: Allows the player to reload the config.yml
             default: false
-        lb.toggle: 
-            description: Allows the player to turn LiveBroadcast on and off
+        lb.broadcast:
+            description: Allows the player to broadcast a message to the server using the LiveBroadcast prefic
             default: false
         
