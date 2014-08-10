@@ -5,7 +5,7 @@ Automatic Broadcast Plugin for CraftBukkit
 
 The "title" is the custom name that appears before each message.
 
-"timer" is the time in seconds between the appearance of each message.
+The "timer" is the time in seconds between the appearance of each message.
 
 You can have as many messages as you would like.
 
