@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<<<<<<< HEAD
 <project name="LiveBroadcast">
 	<target name="test">
 		<mkdir dir="bin"/>
@@ -7,7 +8,7 @@
 			<classpath path="lib/craftbukkit-1.7.9-R0.2.jar"/>
 		</javac>
 	</target>
-
+	
 	<target name="build-jar">
 		<jar destfile="bin/LiveBroadcast.jar"
 		     basedir="bin"
