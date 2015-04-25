@@ -8,8 +8,10 @@
 
 	<target name="test">
 		<mkdir dir="bin"/>
-		<classpath path="lib/craftbukkit-1.7.9-R0.2.jar"/>
-		<javac srcdir="src" destdir="bin"/>
+		<javac destdir="bin">
+			<src path="src"/>
+			<classpath path="lib/craftbukkit-1.7.9-R0.2.jar"/>
+		</javac>
 	</target>
 
 	<target name="build-jar">
