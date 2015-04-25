@@ -52,7 +52,7 @@
 
 	<target name="package-jenkins">
 		<mkdir dir="${dist.dir}" />
-		<jar destFile="${dist.dir}/LiveBroadcast.jar"
+		<jar destFile="${dist.dir}/${jar.file}"
 			 basedir="${build.dir}"
 			 includes="**/*"
 			 excludes="*.jar">
