@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
 <project name="LiveBroadcast">
-
-	<target name="clean">
-		<delete dir="classes" />
-		<delete file="bin/LiveBroadcast.jar" />
-	</target>
-
 	<target name="test">
 		<mkdir dir="bin"/>
 		<javac destdir="bin">
