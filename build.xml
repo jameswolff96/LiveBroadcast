@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
-<project name="LiveBroadcast build.xml">
-     <target name="test">
+<<<<<<< HEAD
+<project name="LiveBroadcast">
+	<target name="test">
 		<mkdir dir="bin"/>
 		<javac destdir="bin">
 			<src path="src"/>
 			<classpath path="lib/craftbukkit-1.7.9-R0.2.jar"/>
 		</javac>
 	</target>
-     <target name="build-jar">
-          <jar destfile="bin/LiveBroadcast.jar"
-               basedir="bin"
-               includes="**"
-               excludes="*.jar">
-          </jar>
-     </target>
+	
+	<target name="build-jar">
+		<jar destfile="bin/LiveBroadcast.jar"
+		     basedir="bin"
+		     includes="**"
+		     excludes="*.jar">
+		</jar>
+	</target>
 </project>

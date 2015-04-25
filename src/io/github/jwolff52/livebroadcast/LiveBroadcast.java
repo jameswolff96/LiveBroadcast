@@ -1,6 +1,6 @@
 /**************************************************************************
     LiveBroadcast - Automatic Broadcast Plugin for CraftBukkit
-    Copyright (C) 2014  James Wolff
+    Copyright (C) 2014-2015  James Wolff
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ public final class LiveBroadcast extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(cmd.getName().equals("lbtoggle")){
-			if (!(sender.hasPermission("lb.toggle") || sender.hasPermission("lb.*"))) {
+			if (!sender.hasPermission("lb.toggle")) {
 				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 				return false;
 			} else {
@@ -125,7 +125,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				return true;
 			}
 		}else if(cmd.getName().equals("lbcredits")){
-			if (!(sender.hasPermission("lb.credits") || sender.hasPermission("lb.*"))) {
+			if (!sender.hasPermission("lb.credits")) {
 				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 				return false;
 			} else {
@@ -133,7 +133,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				return true;
 			}
 		}else if(cmd.getName().equals("lbadd")){
-			if(!(sender.hasPermission("lb.add") ||  sender.hasPermission("lb.*"))) {
+			if(!sender.hasPermission("lb.config.add")) {
 				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 				return false;
 			}else{
@@ -145,7 +145,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				return true;
 			}
 		}else if(cmd.getName().equals("lbdel")){
-			if(!(sender.hasPermission("lb.del") ||  sender.hasPermission("lb.*"))) {
+			if(!sender.hasPermission("lb.config.del")) {
 				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 				return false;
 			}else{
@@ -162,7 +162,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				}
 			}
 		}else if(cmd.getName().equals("lblist")){
-			if(!(sender.hasPermission("lb.list") ||  sender.hasPermission("lb.*"))) {
+			if(!sender.hasPermission("lb.config.list")) {
 				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 				return false;
 			}else{
@@ -179,7 +179,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				}
 			}
 		}else if(cmd.getName().equals("lbreload")){
-			if (!(sender.hasPermission("lb.reload") || sender.hasPermission("lb.*"))) {
+			if (!sender.hasPermission("lb.reload")) {
 				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 				return false;
 			} else {
@@ -187,7 +187,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				return true;
 			}
 		}else if(cmd.getName().equals("lbbroadcast")){
-			if (!(sender.hasPermission("lb.broadcast") || sender.hasPermission("lb.*"))) {
+			if (!sender.hasPermission("lb.broadcast")) {
 				return false;
 			} else {
 				if (args.length == 0) {
