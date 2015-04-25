@@ -45,7 +45,7 @@
 		<mkdir dir="${dist.dir}" />
 		<jar destFile="${dist.dir}/LiveBroadcast.jar"
 			 basedir="${build.dir}"
-			 includes="../plugin.yml ../config.yml **/*.class"
+			 includes="**/*"
 			 excludes="*.jar">
 		</jar>
 	</target>
