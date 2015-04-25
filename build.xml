@@ -1,17 +1,58 @@
 <?xml version="1.0"?>
-<project name="LiveBroadcast">
-	
+<project name="LiveBroadcast" basedir="." default="build">
+
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="bin" />
+	<property name="lib.dir" value="lib" />
+	<property name="dist.dir" value="dist" />
+	<property name="name" value="LiveBroadcast" />
+
+	<path id="master-classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement path="${build.dir}"/>
+	</path>
+
 	<target name="test">
-		<mkdir dir="bin"/>
-		<javac destdir="bin">
-			<src path="src"/>
-			<classpath path="lib/craftbukkit-1.7.9-R0.2.jar"/>
+		<mkdir dir="${build.dir}"/>
+		<javac destdir="${build.dir}">
+			<src path="${src.dir}"/>
+			<classpath refid="master-classpath" />
 		</javac>
+	</target>
+
+	<target name="build">
+		<mkdir dir="${build.dir}"/>
+		<javac destdir="${build.dir}">
+			<src path="${src.dir}"/>
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+
+	<target name="clean">
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="package">
+		<mkdir dir="${dist.dir}" />
+		<jar destFile="${dist.dir}/LiveBroadcast.jar"
+			 basedir="${build.dir}"
+			 includes="../plugin.yml ../config.yml **/*.class"
+			 excludes="*.jar">
+		</jar>
 	</target>
 	
 	<target name="build-jar">
-		<jar destfile="bin/LiveBroadcast.jar"
-		     basedir="bin"
+		<jar destfile="${dist.dir}/LiveBroadcast.jar"
+		     basedir="${build.dir}"
 		     includes="**"
 		     excludes="*.jar">
 		</jar>
