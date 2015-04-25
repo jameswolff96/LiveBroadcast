@@ -1,10 +1,20 @@
 <?xml version="1.0"?>
-<project name="LiveBroadcast build.xml">
-<target name="build-jar">
-<jar destfile="bin/LiveBroadcast.jar"
-     basedir="bin"
-     includes="**"
-     excludes="*.jar">
-</jar>
-</target>
+<project name="LiveBroadcast">
+
+	<target name="clean">
+		<delete dir="classes" />
+		<delete file="bin/LiveBroadcast.jar" />
+	</target>
+
+	<target name="test">
+		<javac srcdir="src" destdir="bin"/>
+	</target>
+
+	<target name="build-jar">
+		<jar destfile="bin/LiveBroadcast.jar"
+		     basedir="bin"
+		     includes="**"
+		     excludes="*.jar">
+		</jar>
+	</target>
 </project>
