@@ -1,4 +1,4 @@
-LiveBroadcast		[img](https://travis-ci.org/jwolff52/LiveBroadcast.svg?branch=2.0.4)
+LiveBroadcast		![Travis-CI Build Status](https://travis-ci.org/jwolff52/LiveBroadcast.svg?branch=2.0.4)
 =============
 
 Automatic Broadcast Plugin for CraftBukkit
