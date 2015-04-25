@@ -6,6 +6,8 @@
 	<property name="lib.dir" value="lib" />
 	<property name="dist.dir" value="dist" />
 	<property name="name" value="LiveBroadcast" />
+	<property environment="env"/>
+	<property name="jar.file" value="Livebroadcast-${env.BUILD_NUMBER}.jar"/>
 
 	<path id="master-classpath">
 		<fileset dir="${lib.dir}">
@@ -43,7 +45,7 @@
 
 	<target name="package">
 		<mkdir dir="${dist.dir}" />
-		<jar destFile="${dist.dir}/LiveBroadcast.jar"
+		<jar destFile="${dist.dir}/${jar.file}"
 			 basedir="${build.dir}"
 			 includes="**/*"
 			 excludes="*.jar">
