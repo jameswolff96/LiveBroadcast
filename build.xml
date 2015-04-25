@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<<<<<<< HEAD
 <project name="LiveBroadcast">
+	
 	<target name="test">
 		<mkdir dir="bin"/>
 		<javac destdir="bin">
