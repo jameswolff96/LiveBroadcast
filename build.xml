@@ -28,6 +28,9 @@
 			<src path="${src.dir}"/>
 			<classpath refid="master-classpath" />
 		</javac>
+		<copy file="plugin.yml" todir="${build.dir}" />
+		<copy file="config.yml" todir="${build.dir}" />
+		<copy file="LICENSE" todir="${build.dir}" />
 	</target>
 
 	<target name="clean">

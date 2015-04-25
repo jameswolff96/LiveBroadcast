@@ -227,7 +227,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		message = parseColors(message);
 		maxMessages++;
 		sm.saveConfig();
-		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: \"" + ChatColor.RESET + sm.getConfig().getString(maxMessages + "") + ChatColor.WHITE + "\" was added to the  list!");
+		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: " + ChatColor.RESET + "\"" + sm.getConfig().getString(maxMessages + "") + ChatColor.WHITE + "\" was added to the  list!");
 	}
 
 	private void del(CommandSender sender, String[] args) throws NumberFormatException{
@@ -242,7 +242,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		sm.getConfig().set(maxMessages + "", null);
 		maxMessages--;
 		sm.saveConfig();
-		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: \"" + ChatColor.RESET + message + ChatColor.WHITE + "\" was removed from the list!");
+		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: " + ChatColor.RESET + "\"" + message + ChatColor.WHITE + "\" was removed from the list!");
 	}
 
 	private void list(CommandSender sender, String page) throws NumberFormatException{

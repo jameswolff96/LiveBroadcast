@@ -1,0 +1,6 @@
+# Default Configuration File for LiveBroadcast, color-codes are supported
+# You MUST reload the SERVER to update the "timer" properly
+title: '&6[&aLive&9Broadcast&6]&b'
+timer: 30
+'1': 'This is a line w&dith a special color!'
+'2': This plugin allows you to have as many lines as you want!

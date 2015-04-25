@@ -1,0 +1,62 @@
+name: LiveBroadcast
+main: io.github.jwolff52.livebroadcast.LiveBroadcast
+version: 2.0.4.2
+commands:
+    lbtoggle: 
+        description: Toggles the LiveBroadcast Plugin on/off!
+    lbcredits: 
+        description: View the version and contributor(s) to the LiveBroadcast Plugin!
+    lbadd: 
+        description: Adds a new message to the LiveBroadcast Plugin!
+    lbdel: 
+        description: Deletes a message from the LiveBroadcast Plugin!
+    lblist: 
+        description: Lists the messages for the LiveBroadcast Plugin!
+    lbreload: 
+        description: Reloads the LiveBroadcast Plugin!
+    lbbroadcast: 
+        description: Broadcasts a message to the server using the LiveBroadcast prefix.
+permissions:
+    lb.*:
+        description: Gives access to all of the LiveBroadcast Commands
+        children:
+            lb.toggle: true
+            lb.credits: true
+            lb.reload: true
+            lb.config.add: true
+            lb.config.del: true
+            lb.config.list: true
+            lb.broadcast: true
+        default: false
+    lb.config.*:
+        description: Gives access to all of the LiveBroadcast Config Commands
+        children:
+            lb.toggle: false
+            lb.credits: false
+            lb.reload: false
+            lb.config.add: true
+            lb.config.del: true
+            lb.config.list: true
+            lb.broadcast: false
+        default: false
+    lb.toggle: 
+        description: Allows the player to turn LiveBroadcast on and off
+        default: false
+    lb.credits:
+        description: Allows the player to view the plugin creator and version
+        default: true
+    lb.config.add:
+        description: Allows the player to add messages to the config.yml
+        default: false
+    lb.config.del:
+        description: Allows the player to remove messages from the config.yml
+        default: false
+    lb.config.list:
+        description: Allows the player to view the messages in the config.yml
+        default: false
+    lb.reload:
+        description: Allows the player to reload the config.yml
+        default: false
+    lb.broadcast:
+        description: Allows the player to broadcast a message to the server using the LiveBroadcast prefic
+        default: false
