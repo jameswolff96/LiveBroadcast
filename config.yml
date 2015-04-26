@@ -1,6 +1,17 @@
 # Default Configuration File for LiveBroadcast, color-codes are supported
-# You MUST reload the SERVER to update the "timer" properly
+# You MUST reload the Server to update the "timer" properly
 title: '&6[&aLive&9Broadcast&6]&b'
-timer: 30
+timer: {
+  # The time to use when max_players+ players are on the server or
+  # when use_scalable_timer is set to false
+  min_time: 30,
+  # The time to use when only one player is on the server
+  max_time: 60,
+  # When the number of players on the server reaches this value
+  # the plugin will use min_time for the timer
+  max_players: 10,
+  # If this is set to false the plugin will use min_time as the timer!
+  use_scalable_timer: true
+}
 '1': 'This is a line w&dith a special color!'
-'2': This plugin allows you to have as many lines as you want!
+'2': 'This plugin allows you to have as many lines as you want!'

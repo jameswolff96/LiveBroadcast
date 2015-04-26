@@ -18,6 +18,8 @@
 
 package io.github.jwolff52.livebroadcast;
 
+import io.github.jwolff52.livebroadcast.util.LiveBroadcastListener;
+import io.github.jwolff52.livebroadcast.util.LiveBroadcastTimer;
 import io.github.jwolff52.livebroadcast.util.SettingsManager;
 
 import java.io.File;
@@ -43,18 +45,24 @@ public final class LiveBroadcast extends JavaPlugin {
 	public static SettingsManager sm;
 
 	private static PluginDescriptionFile pdf;
+	
+	private LiveBroadcastListener lbl;
 
 	private String state, broadcastTitle;
 
-	private boolean toggle = true;
+	private boolean toggle = false, useScalableTimer;
 
-	private int timer, configNumber = 1, maxMessages = 0;
+	private int minTime, maxTime, maxPlayers, configNumber = 1, maxMessages = 0;
 
 	@Override
 	public void onEnable() {
 		pdf = getDescription();
 		sm = SettingsManager.getInstance();
 		sm.setup(this);
+		
+		lbl=new LiveBroadcastListener(this);
+		
+		getServer().getPluginManager().registerEvents(lbl, this);
 
 		if (!(new File(getDataFolder(), "README.txt").exists())) {
 			InputStream is = LiveBroadcast.class
@@ -83,8 +91,15 @@ public final class LiveBroadcast extends JavaPlugin {
 		}
 
 		setBroadcastTitle(parseColors(sm.getConfig().getString("title")));
-		timer = getConfig().getInt("timer") * 20;
-		/*************************************************************/
+		minTime = getConfig().getConfigurationSection("timer").getInt("min_time");
+		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
+		maxPlayers = getConfig().getConfigurationSection("timer").getInt("min_time");
+		useScalableTimer = getConfig().getConfigurationSection("timer").getBoolean("use_scalable_timer");
+		if(getServer().getOnlinePlayers().size() > 0) {
+			toggle = true;
+		}
+		new LiveBroadcastTimer(this);
+		/************************************************************
 		// Scheduler that prints the messages every 'timer' seconds
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 					
@@ -101,7 +116,7 @@ public final class LiveBroadcast extends JavaPlugin {
 					configNumber = 1;
 				}
 			}
-		}, 0L, timer);
+		}, 0L, getTimer());
 		/*************************************************************/
 		this.logger.info(pdf.getName() + " Version: " + pdf.getVersion()
 				+ " has been enabled!");
@@ -126,21 +141,21 @@ public final class LiveBroadcast extends JavaPlugin {
 				return true;
 			}else if(cmd.getName().equals("lbadd")){
 				if(args.length<1){
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbadd <message>");
+					sender.sendMessage(broadcastTitle+"Usage: /lbadd <message>");
 					return false;
 				}
 				add(sender, args);
 				return true;
 			}else if(cmd.getName().equals("lbdel")){
 				if(args.length<1){
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+					sender.sendMessage(broadcastTitle+"Usage: /lbdel <message_number>");
 					return false;
 				}
 				try{
 					del(sender, args);
 					return true;
 				}catch(NumberFormatException e){
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+					sender.sendMessage(broadcastTitle+"Usage: /lbdel <message_number>");
 					return false;
 				}
 			}else if(cmd.getName().equals("lblist")){
@@ -152,7 +167,7 @@ public final class LiveBroadcast extends JavaPlugin {
 					list(sender, args[0]);
 					return true;
 				}catch(NumberFormatException e){
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lblist [page]");
+					sender.sendMessage(broadcastTitle+"Usage: /lblist [page]");
 					return false;
 				}
 			}else if(cmd.getName().equals("lbreload")){
@@ -160,8 +175,8 @@ public final class LiveBroadcast extends JavaPlugin {
 				return true;
 			}else if(cmd.getName().equals("lbbroadcast")){
 				if (args.length == 0) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA+"I thought you wanted to say something?");
-					sender.sendMessage(parseColors(sm.getConfig().getString("title")) + ChatColor.DARK_RED + "Usage: /lbbroadcast <word> [word2] [word3]...");
+					sender.sendMessage(broadcastTitle + ChatColor.AQUA+"I thought you wanted to say something?");
+					sender.sendMessage(broadcastTitle + ChatColor.DARK_RED + "Usage: /lbbroadcast <word> [word2] [word3]...");
 					return false;
 				} else if (args.length >= 1) {
 					broadcast(args);
@@ -179,7 +194,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				}
 			}else if(cmd.getName().equals("lbcredits")){
 				if (!sender.hasPermission("lb.credits") || sender instanceof ConsoleCommandSender) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					sender.sendMessage(broadcastTitle+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 					return false;
 				} else {
 					credits(sender);
@@ -187,11 +202,11 @@ public final class LiveBroadcast extends JavaPlugin {
 				}
 			}else if(cmd.getName().equals("lbadd")){
 				if(!sender.hasPermission("lb.config.add")) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					sender.sendMessage(broadcastTitle+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 					return false;
 				}else{
 					if(args.length<1){
-						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbadd <message>");
+						sender.sendMessage(broadcastTitle+"Usage: /lbadd <message>");
 						return false;
 					}
 					add(sender, args);
@@ -199,24 +214,24 @@ public final class LiveBroadcast extends JavaPlugin {
 				}
 			}else if(cmd.getName().equals("lbdel")){
 				if(!sender.hasPermission("lb.config.del")) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					sender.sendMessage(broadcastTitle+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 					return false;
 				}else{
 					if(args.length<1){
-						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+						sender.sendMessage(broadcastTitle+"Usage: /lbdel <message_number>");
 						return false;
 					}
 					try{
 						del(sender, args);
 						return true;
 					}catch(NumberFormatException e){
-						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+						sender.sendMessage(broadcastTitle+"Usage: /lbdel <message_number>");
 						return false;
 					}
 				}
 			}else if(cmd.getName().equals("lblist")){
 				if(!sender.hasPermission("lb.config.list")) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					sender.sendMessage(broadcastTitle+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 					return false;
 				}else{
 					if(args.length<1){
@@ -227,13 +242,13 @@ public final class LiveBroadcast extends JavaPlugin {
 						list(sender, args[0]);
 						return true;
 					}catch(NumberFormatException e){
-						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lblist [page]");
+						sender.sendMessage(broadcastTitle+"Usage: /lblist [page]");
 						return false;
 					}
 				}
 			}else if(cmd.getName().equals("lbreload")){
 				if (!sender.hasPermission("lb.reload")) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					sender.sendMessage(broadcastTitle+ChatColor.DARK_RED+"You do not have permission to preform this command!");
 					return false;
 				} else {
 					reload(sender);
@@ -244,8 +259,8 @@ public final class LiveBroadcast extends JavaPlugin {
 					return false;
 				} else {
 					if (args.length == 0) {
-						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA+"I thought you wanted to say something?");
-						sender.sendMessage(parseColors(sm.getConfig().getString("title")) + ChatColor.DARK_RED + "Usage: /lbbroadcast <word> [word2] [word3]...");
+						sender.sendMessage(broadcastTitle+ChatColor.AQUA+"I thought you wanted to say something?");
+						sender.sendMessage(broadcastTitle + ChatColor.DARK_RED + "Usage: /lbbroadcast <word> [word2] [word3]...");
 						return false;
 					} else if (args.length >= 1) {
 						broadcast(args);
@@ -257,7 +272,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		return super.onCommand(sender, cmd, label, args);
 	}
 
-	private void toggle(CommandSender sender) {
+	public void toggle(CommandSender sender) {
 		if (getToggle()) {
 			setToggle(false);
 			state = "off";
@@ -265,7 +280,7 @@ public final class LiveBroadcast extends JavaPlugin {
 			setToggle(true);
 			state = "on";
 		}
-		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"LiveBroacast was turned " + state);
+		sender.sendMessage(broadcastTitle+"LiveBroacast was turned " + state);
 	}
 
 	private void credits(CommandSender sender) {
@@ -282,7 +297,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		message = parseColors(message);
 		maxMessages++;
 		sm.saveConfig();
-		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: " + ChatColor.RESET + "\"" + sm.getConfig().getString(maxMessages + "") + ChatColor.WHITE + "\" was added to the  list!");
+		sender.sendMessage(broadcastTitle+"Message: " + ChatColor.RESET + "\"" + sm.getConfig().getString(maxMessages + "") + ChatColor.WHITE + "\" was added to the  list!");
 	}
 
 	private void del(CommandSender sender, String[] args) throws NumberFormatException{
@@ -297,7 +312,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		sm.getConfig().set(maxMessages + "", null);
 		maxMessages--;
 		sm.saveConfig();
-		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Message: " + ChatColor.RESET + "\"" + message + ChatColor.WHITE + "\" was removed from the list!");
+		sender.sendMessage(broadcastTitle+"Message: " + ChatColor.RESET + "\"" + message + ChatColor.WHITE + "\" was removed from the list!");
 	}
 
 	private void list(CommandSender sender, String page) throws NumberFormatException{
@@ -331,14 +346,16 @@ public final class LiveBroadcast extends JavaPlugin {
 			}
 		}
 		maxMessages=tempMaxMessages;
-		setBroadcastTitle(parseColors(sm.getConfig().getString("title")));
-		timer = getConfig().getInt("timer") * 20;
-		sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA + "LiveBroacast configuration successfully reloaded!!");
+		minTime = getConfig().getConfigurationSection("timer").getInt("min_time");
+		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
+		maxPlayers = getConfig().getConfigurationSection("timer").getInt("min_time");
+		useScalableTimer = getConfig().getConfigurationSection("timer").getBoolean("use_scalable_timer");
+		sender.sendMessage(broadcastTitle+ChatColor.AQUA + "LiveBroacast configuration successfully reloaded!!");
 		setToggle(true);
 	}
 	
 	private void broadcast(String[] args){
-		String message = parseColors(sm.getConfig().getString("title"));
+		String message = broadcastTitle;
 		for (String subMessage : args) {
 			message += subMessage + " ";
 		}
@@ -363,5 +380,23 @@ public final class LiveBroadcast extends JavaPlugin {
 
 	public void setBroadcastTitle(String broadcastTitle) {
 		this.broadcastTitle = broadcastTitle;
+	}
+
+	public long getTimer() {
+		if(useScalableTimer) {
+			int time = (int)(maxTime - (maxTime * (getServer().getOnlinePlayers().size()/(double)maxPlayers)));
+			logger.info(time+"");
+			if(time < minTime) {
+				return minTime;
+			}
+			return time;
+		} else {
+			logger.info("blah");
+			return minTime;
+		}
+	}
+
+	public int getMaxMessages() {
+		return maxMessages;
 	}
 }

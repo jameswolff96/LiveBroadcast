@@ -42,9 +42,8 @@ public class SettingsManager {
 	public void setup(Plugin p){
 		plugin=p;
 		config=plugin.getConfig();
-		config.options().copyDefaults(true);
 		cfile=new File(plugin.getDataFolder(), "config.yml");
-		saveConfig();
+		p.saveDefaultConfig();
 
 	}
 	public FileConfiguration getConfig(){
