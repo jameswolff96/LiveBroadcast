@@ -6,10 +6,11 @@
 	<property name="lib.dir" value="lib" />
 	<property name="dist.dir" value="dist" />
 	<property name="name" value="LiveBroadcast" />
+	<property name="bukkit.version" value="1.8.3" />
 
 	<path id="master-classpath">
 		<fileset dir="${lib.dir}">
-			<include name="*.jar"/>
+			<include name="craftbukkit-${bukkit.version}.jar"/>
 		</fileset>
 		<pathelement path="${build.dir}"/>
 	</path>
