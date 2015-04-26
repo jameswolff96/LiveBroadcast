@@ -30,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -116,39 +117,21 @@ public final class LiveBroadcast extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(cmd.getName().equals("lbtoggle")){
-			if (!sender.hasPermission("lb.toggle")) {
-				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
-				return false;
-			} else {
+		if(sender instanceof ConsoleCommandSender) {
+			if(cmd.getName().equals("lbtoggle")){
 				toggle(sender);
 				return true;
-			}
-		}else if(cmd.getName().equals("lbcredits")){
-			if (!sender.hasPermission("lb.credits")) {
-				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
-				return false;
-			} else {
+			}else if(cmd.getName().equals("lbcredits")){
 				credits(sender);
 				return true;
-			}
-		}else if(cmd.getName().equals("lbadd")){
-			if(!sender.hasPermission("lb.config.add")) {
-				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
-				return false;
-			}else{
+			}else if(cmd.getName().equals("lbadd")){
 				if(args.length<1){
 					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbadd <message>");
 					return false;
 				}
 				add(sender, args);
 				return true;
-			}
-		}else if(cmd.getName().equals("lbdel")){
-			if(!sender.hasPermission("lb.config.del")) {
-				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
-				return false;
-			}else{
+			}else if(cmd.getName().equals("lbdel")){
 				if(args.length<1){
 					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
 					return false;
@@ -160,12 +143,7 @@ public final class LiveBroadcast extends JavaPlugin {
 					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
 					return false;
 				}
-			}
-		}else if(cmd.getName().equals("lblist")){
-			if(!sender.hasPermission("lb.config.list")) {
-				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
-				return false;
-			}else{
+			}else if(cmd.getName().equals("lblist")){
 				if(args.length<1){
 					list(sender, "1");
 					return true;
@@ -177,29 +155,106 @@ public final class LiveBroadcast extends JavaPlugin {
 					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lblist [page]");
 					return false;
 				}
-			}
-		}else if(cmd.getName().equals("lbreload")){
-			if (!sender.hasPermission("lb.reload")) {
-				sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
-				return false;
-			} else {
+			}else if(cmd.getName().equals("lbreload")){
 				reload(sender);
 				return true;
-			}
-		}else if(cmd.getName().equals("lbbroadcast")){
-			if (!sender.hasPermission("lb.broadcast")) {
-				return false;
-			} else {
+			}else if(cmd.getName().equals("lbbroadcast")){
 				if (args.length == 0) {
-					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA+"I thought you wanted to say something?\nUsage: /lbbroadcast <word> [word2] [word3]...");
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA+"I thought you wanted to say something?");
+					sender.sendMessage(parseColors(sm.getConfig().getString("title")) + ChatColor.DARK_RED + "Usage: /lbbroadcast <word> [word2] [word3]...");
 					return false;
 				} else if (args.length >= 1) {
 					broadcast(args);
 					return true;
 				}
 			}
+		} else {
+			if(cmd.getName().equals("lbtoggle")){
+				if (!sender.hasPermission("lb.toggle") || sender instanceof ConsoleCommandSender) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					return false;
+				} else {
+					toggle(sender);
+					return true;
+				}
+			}else if(cmd.getName().equals("lbcredits")){
+				if (!sender.hasPermission("lb.credits") || sender instanceof ConsoleCommandSender) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					return false;
+				} else {
+					credits(sender);
+					return true;
+				}
+			}else if(cmd.getName().equals("lbadd")){
+				if(!sender.hasPermission("lb.config.add")) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					return false;
+				}else{
+					if(args.length<1){
+						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbadd <message>");
+						return false;
+					}
+					add(sender, args);
+					return true;
+				}
+			}else if(cmd.getName().equals("lbdel")){
+				if(!sender.hasPermission("lb.config.del")) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					return false;
+				}else{
+					if(args.length<1){
+						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+						return false;
+					}
+					try{
+						del(sender, args);
+						return true;
+					}catch(NumberFormatException e){
+						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lbdel <message_number>");
+						return false;
+					}
+				}
+			}else if(cmd.getName().equals("lblist")){
+				if(!sender.hasPermission("lb.config.list")) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					return false;
+				}else{
+					if(args.length<1){
+						list(sender, "1");
+						return true;
+					}
+					try{
+						list(sender, args[0]);
+						return true;
+					}catch(NumberFormatException e){
+						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+"Usage: /lblist [page]");
+						return false;
+					}
+				}
+			}else if(cmd.getName().equals("lbreload")){
+				if (!sender.hasPermission("lb.reload")) {
+					sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.DARK_RED+"You do not have permission to preform this command!");
+					return false;
+				} else {
+					reload(sender);
+					return true;
+				}
+			}else if(cmd.getName().equals("lbbroadcast")){
+				if (!sender.hasPermission("lb.broadcast")) {
+					return false;
+				} else {
+					if (args.length == 0) {
+						sender.sendMessage(parseColors(sm.getConfig().getString("title"))+ChatColor.AQUA+"I thought you wanted to say something?");
+						sender.sendMessage(parseColors(sm.getConfig().getString("title")) + ChatColor.DARK_RED + "Usage: /lbbroadcast <word> [word2] [word3]...");
+						return false;
+					} else if (args.length >= 1) {
+						broadcast(args);
+						return true;
+					}
+				}
+			}
 		}
-		return false;
+		return super.onCommand(sender, cmd, label, args);
 	}
 
 	private void toggle(CommandSender sender) {
