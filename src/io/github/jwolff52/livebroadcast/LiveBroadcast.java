@@ -22,11 +22,7 @@ import io.github.jwolff52.livebroadcast.util.LiveBroadcastListener;
 import io.github.jwolff52.livebroadcast.util.LiveBroadcastTimer;
 import io.github.jwolff52.livebroadcast.util.SettingsManager;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -65,22 +61,6 @@ public final class LiveBroadcast extends JavaPlugin {
 		lbl=new LiveBroadcastListener(this);
 		
 		getServer().getPluginManager().registerEvents(lbl, this);
-
-		if (!(new File(getDataFolder(), "README.txt").exists())) {
-			InputStream is = LiveBroadcast.class
-					.getResourceAsStream("/README.md");
-			OutputStream os;
-			int readBytes;
-			byte[] buffer = new byte[4096];
-			try {
-				os = new FileOutputStream(new File(getDataFolder() + "/README.txt"));
-				while ((readBytes = is.read(buffer)) > 0) {
-					os.write(buffer, 0, readBytes);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 
 		while (true) {
 			if (sm.getConfig().getString(configNumber + "") != null) {
