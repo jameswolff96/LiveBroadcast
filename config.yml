@@ -13,5 +13,7 @@ timer: {
   # If this is set to false the plugin will use min_time as the timer!
   use_scalable_timer: true
 }
+#Whether or to randomize the order of messages
+randomize: false
 '1': 'This is a line w&dith a special color!'
 '2': 'This plugin allows you to have as many lines as you want!'

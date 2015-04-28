@@ -44,7 +44,7 @@ public class SettingsManager {
 		config=plugin.getConfig();
 		cfile=new File(plugin.getDataFolder(), "config.yml");
 		p.saveDefaultConfig();
-
+		config.addDefault("randomize", false);
 	}
 	public FileConfiguration getConfig(){
 		return config;

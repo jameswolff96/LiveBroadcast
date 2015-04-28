@@ -26,8 +26,7 @@ public class LiveBroadcastListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		lb.logger.info(lb.getServer().getOnlinePlayers().size()+"");
-		if(lb.getServer().getOnlinePlayers().size() == 0) {
+		if(lb.getServer().getOnlinePlayers().size() == 1) {
 			if(lb.getToggle()) {
 				lb.toggle(lb.getServer().getConsoleSender());
 			}

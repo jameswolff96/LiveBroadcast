@@ -48,7 +48,7 @@ public final class LiveBroadcast extends JavaPlugin {
 
 	private String state, broadcastTitle;
 
-	private boolean toggle = false, useScalableTimer;
+	private boolean toggle = false, useScalableTimer, randomize;
 
 	private int minTime, maxTime, maxPlayers, configNumber = 1, maxMessages = 0;
 
@@ -77,6 +77,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
 		maxPlayers = getConfig().getConfigurationSection("timer").getInt("min_time");
 		useScalableTimer = getConfig().getConfigurationSection("timer").getBoolean("use_scalable_timer");
+		setRandomize(getConfig().getBoolean("randomize"));
 		if(getServer().getOnlinePlayers().size() > 0) {
 			toggle = true;
 		}
@@ -385,5 +386,13 @@ public final class LiveBroadcast extends JavaPlugin {
 
 	public int getMaxMessages() {
 		return maxMessages;
+	}
+
+	public boolean isRandomize() {
+		return randomize;
+	}
+
+	public void setRandomize(boolean randomize) {
+		this.randomize = randomize;
 	}
 }
