@@ -335,7 +335,7 @@ public final class LiveBroadcast extends JavaPlugin {
 				break;
 			}
 		}
-		setBroadcastTitle(getConfig().getString("title"));
+		setBroadcastTitle(parseColors(getConfig().getString("title")));
 		maxMessages=tempMaxMessages;
 		minTime = getConfig().getConfigurationSection("timer").getInt("min_time");
 		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
