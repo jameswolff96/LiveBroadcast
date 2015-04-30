@@ -335,11 +335,13 @@ public final class LiveBroadcast extends JavaPlugin {
 				break;
 			}
 		}
+		setBroadcastTitle(getConfig().getString("title"));
 		maxMessages=tempMaxMessages;
 		minTime = getConfig().getConfigurationSection("timer").getInt("min_time");
 		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
 		maxPlayers = getConfig().getConfigurationSection("timer").getInt("min_time");
 		useScalableTimer = getConfig().getConfigurationSection("timer").getBoolean("use_scalable_timer");
+		setRandomize(getConfig().getBoolean("randomize"));
 		sender.sendMessage(broadcastTitle+ChatColor.AQUA + "LiveBroacast configuration successfully reloaded!!");
 		setToggle(true);
 	}

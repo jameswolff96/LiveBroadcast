@@ -1,5 +1,4 @@
 # Default Configuration File for LiveBroadcast, color-codes are supported
-# You MUST reload the Server to update the "timer" properly
 title: '&6[&aLive&9Broadcast&6]&b'
 timer: {
   # The time to use when max_players+ players are on the server or
@@ -13,7 +12,7 @@ timer: {
   # If this is set to false the plugin will use min_time as the timer!
   use_scalable_timer: true
 }
-#Whether or to randomize the order of messages
+# Whether or to randomize the order of messages
 randomize: false
 '1': 'This is a line w&dith a special color!'
 '2': 'This plugin allows you to have as many lines as you want!'
