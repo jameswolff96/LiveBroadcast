@@ -1,6 +1,6 @@
 name: LiveBroadcast
 main: io.github.jwolff52.livebroadcast.LiveBroadcast
-version: 2.1.6
+version: 2.1.7
 commands:
     lbtoggle: 
         description: Toggles the LiveBroadcast Plugin on/off!

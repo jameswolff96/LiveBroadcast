@@ -371,6 +371,10 @@ public final class LiveBroadcast extends JavaPlugin {
 	}
 
 	public void setBroadcastTitle(String broadcastTitle) {
+		if(!broadcastTitle.endsWith(" ")) {
+			this.broadcastTitle = broadcastTitle + " ";
+			return;
+		}
 		this.broadcastTitle = broadcastTitle;
 	}
 
