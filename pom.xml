@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>LiveBroadcast</groupId>
   <artifactId>LiveBroadcast</artifactId>
-  <version>2.1.7</version>
+  <version>2.1.9</version>
   <properties>
   	<build.number>SNAPSHOT</build.number>
   </properties>
@@ -29,7 +29,7 @@
   	</dependency>
   </dependencies>
   <build>
-  	<finalName>LiveBroadcast-${build.number}</finalName>
+  	<finalName>LiveBroadcast</finalName>
     <sourceDirectory>src</sourceDirectory>
     <resources>
     	<resource>

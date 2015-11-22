@@ -2,6 +2,8 @@ package io.github.jwolff52.livebroadcast;
 
 public class Driver {
 	public static void main(String[] args) {
-		System.out.println((int)(60 - (60 * (1/(double)10))));
+		int minTime = 1, maxTime = 30, maxPlayers = 10, onlinePlayers = 20;
+		int time = (int)(maxTime - (maxTime * (onlinePlayers/(double)maxPlayers)));
+		System.out.println(time);
 	}
 }

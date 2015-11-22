@@ -75,7 +75,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		setBroadcastTitle(parseColors(sm.getConfig().getString("title")));
 		minTime = getConfig().getConfigurationSection("timer").getInt("min_time");
 		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
-		maxPlayers = getConfig().getConfigurationSection("timer").getInt("min_time");
+		maxPlayers = getConfig().getConfigurationSection("timer").getInt("max_players");
 		useScalableTimer = getConfig().getConfigurationSection("timer").getBoolean("use_scalable_timer");
 		setRandomize(getConfig().getBoolean("randomize"));
 		if(getServer().getOnlinePlayers().size() > 0) {
@@ -339,7 +339,7 @@ public final class LiveBroadcast extends JavaPlugin {
 		maxMessages=tempMaxMessages;
 		minTime = getConfig().getConfigurationSection("timer").getInt("min_time");
 		maxTime = getConfig().getConfigurationSection("timer").getInt("max_time");
-		maxPlayers = getConfig().getConfigurationSection("timer").getInt("min_time");
+		maxPlayers = getConfig().getConfigurationSection("timer").getInt("max_players");
 		useScalableTimer = getConfig().getConfigurationSection("timer").getBoolean("use_scalable_timer");
 		setRandomize(getConfig().getBoolean("randomize"));
 		sender.sendMessage(broadcastTitle+ChatColor.AQUA + "LiveBroacast configuration successfully reloaded!!");
@@ -380,11 +380,10 @@ public final class LiveBroadcast extends JavaPlugin {
 
 	public long getTimer() {
 		if(useScalableTimer) {
-			int time = (int)(maxTime - (maxTime * (getServer().getOnlinePlayers().size()/(double)maxPlayers)));
-			if(time < minTime) {
+			if(getServer().getOnlinePlayers().size() >= maxPlayers) {
 				return minTime;
 			}
-			return time;
+			return (int)(maxTime - (maxTime * (getServer().getOnlinePlayers().size()/(double)maxPlayers)));
 		} else {
 			return minTime;
 		}
