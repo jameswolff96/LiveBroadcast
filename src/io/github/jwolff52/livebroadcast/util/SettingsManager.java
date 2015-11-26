@@ -18,19 +18,19 @@
 
 package io.github.jwolff52.livebroadcast.util;
 
+import io.github.jwolff52.livebroadcast.LiveBroadcast;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 
 public class SettingsManager {
 	
-	Plugin plugin;
+	LiveBroadcast lb;
 	FileConfiguration config;
 	File cfile;
 	
@@ -39,12 +39,11 @@ public class SettingsManager {
 	public static SettingsManager getInstance(){
 		return instance;
 	}
-	public void setup(Plugin p){
-		plugin=p;
-		config=plugin.getConfig();
-		cfile=new File(plugin.getDataFolder(), "config.yml");
-		p.saveDefaultConfig();
-		config.addDefault("randomize", false);
+	public void setup(LiveBroadcast l){
+		lb=l;
+		config=lb.getConfig();
+		cfile=new File(lb.getDataFolder(), "config.yml");
+		lb.saveDefaultConfig();
 	}
 	public FileConfiguration getConfig(){
 		return config;
@@ -56,8 +55,7 @@ public class SettingsManager {
 		try {
 			config.save(cfile);
 		} catch (IOException e) {
-			Bukkit.getServer().getLogger().severe(ChatColor.RED+"Could not save "+plugin.getDescription().getName()+" config.yml!");
-			e.printStackTrace();
+			lb.getLogger().severe(ChatColor.RED+"Could not save "+lb.getDescription().getName()+" config.yml!");
 		}
 	}
 }

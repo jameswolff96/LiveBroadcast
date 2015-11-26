@@ -10,16 +10,12 @@ import org.bukkit.Bukkit;
 
 public class LiveBroadcastTimer implements Runnable {
 	
-	private LiveBroadcast lb;
-	private ArrayList<String> messages;
+	private static LiveBroadcast lb;
+	private static ArrayList<String> messages;
 	
-	public LiveBroadcastTimer(LiveBroadcast lb) {
-		this.lb=lb;
-		if(lb.isRandomize()) {
-			scrambleMessages();
-		} else {
-			initMessages();
-		}
+	public LiveBroadcastTimer(LiveBroadcast l) {
+		lb=l;
+		initMessages();
 		new Thread(this).start();
 	}
 	
@@ -32,9 +28,7 @@ public class LiveBroadcastTimer implements Runnable {
 			}
 			configNumber++;
 			if(configNumber > lb.getMaxMessages()) {
-				if(lb.isRandomize()) {
-					scrambleMessages();
-				}
+				initMessages();
 				configNumber=1;
 			}
 			try {
@@ -45,18 +39,13 @@ public class LiveBroadcastTimer implements Runnable {
 		}
 	}
 	
-	private void scrambleMessages() {
+	public static void initMessages() {
 		messages = new ArrayList<>();
 		for(int i=1;i <= lb.getMaxMessages();i++) {
 			messages.add(LiveBroadcast.sm.getConfig().getString(i+""));
 		}
-		Collections.shuffle(messages);
-	}
-	
-	private void initMessages() {
-		messages = new ArrayList<>();
-		for(int i=1;i <= lb.getMaxMessages();i++) {
-			messages.add(LiveBroadcast.sm.getConfig().getString(i+""));
+		if(lb.isRandomize()) {
+			Collections.shuffle(messages);
 		}
 	}
 
