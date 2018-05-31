@@ -23,6 +23,9 @@ public class LiveBroadcastTimer implements Runnable {
 	public void run() {
 		int configNumber = 1;
 		while(true) {
+			if(messages == null || messages.size() == 0) {
+				lb.setToggle(false);
+			}
 			if (lb.getToggle()){
 				Bukkit.broadcastMessage(lb.getBroadcastTitle() + lb.parseColors(messages.get(configNumber-1)));
 			}
