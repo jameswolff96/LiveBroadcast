@@ -354,7 +354,7 @@ public final class LiveBroadcast extends JavaPlugin {
 	private void reload(CommandSender sender) {
 		reload();
 		sender.sendMessage(broadcastTitle + ChatColor.AQUA
-				+ "LiveBroacast configuration successfully reloaded!! " + minTime);
+				+ "LiveBroacast configuration successfully reloaded!!");
 		setToggle(true);
 		LiveBroadcastTimer.initMessages();
 	}
